@@ -3,7 +3,7 @@
 
 
 local placeId = game.PlaceId
-local correctIds = {15588442388, 15502339080, 15588442388}
+local correctIds = {15588442388, 15502339080, 15588442388,8737899170}
 
 if table.find(correctIds, placeId) then
  getgenv().Config = {
@@ -41,7 +41,12 @@ if table.find(correctIds, placeId) then
 else
 while true do
 
-    game:GetService("TeleportService"):Teleport(15502339080)
+    local teleportService = game:GetService("TeleportService")
+local player = game.Players.LocalPlayer
+local placeID = 8737899170
+
+teleportService:Teleport(placeID, player.Character)
+
     wait(2)
     end
 end
