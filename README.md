@@ -13,7 +13,7 @@ if table.find(correctIds, placeId) then
 
 {
                         Item = "Diamond",
-                        Price = 11500,
+                        Price = 12000,
                         Type = "Seed"
                     },
 
