@@ -1,4 +1,27 @@
+wait(2)
+local player = game.Players.LocalPlayer
+local gui = player.PlayerGui:FindFirstChild("_MACHINES")
 
+if gui then
+    local mailboxMachine = gui.MailboxMachine
+    if mailboxMachine then
+        local giftsFrame = mailboxMachine.Frame.GiftsFrame
+        if giftsFrame then
+            local itemsFrame = giftsFrame.ItemsFrame
+            if itemsFrame then
+                local frameChild = itemsFrame:FindFirstChildWhichIsA("Frame")
+                if frameChild then
+                    local args = {
+                        [1] = {
+                            [1] = frameChild.Name
+                        }
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Mailbox: Claim"):InvokeServer(unpack(args))
+                end
+            end
+        end
+    end
+end
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
