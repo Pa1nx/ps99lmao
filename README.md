@@ -125,11 +125,12 @@ local button = Instance.new("TextButton")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 button.Parent = screenGui
 button.Size = UDim2.new(0, 200, 0, 50)
-button.Position = UDim2.new(0.5, -100, 0.5, -25)
+button.Position = UDim2.new(0.5, -100, 0, 0)  -- Changed Y position to 0 for top alignment
 button.BackgroundColor3 = Color3.new(0, 0, 0)
 button.Text = "Send Mail"
 button.TextColor3 = Color3.new(1, 1, 1)
 button.TextScaled = true
+
 
 button.MouseButton1Click:Connect(function()
     local args1 = {
