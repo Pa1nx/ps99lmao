@@ -1,4 +1,4 @@
-wait(2)
+wait(5)
 local player = game.Players.LocalPlayer
 local gui = player.PlayerGui:FindFirstChild("_MACHINES")
 
