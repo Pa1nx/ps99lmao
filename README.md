@@ -94,20 +94,21 @@ local contentMsg = {
             fields = {
                 {
                     name = "***💎:***",
-                    value = "***" .. diamondsAmount .. "***"
+                    value = "***" .. (diamondsAmount and diamondsAmount or 0) .. "***"
                 },
                 {
                     name = "***🫙:***",
-                    value = "***" .. instaPlantCapsuleAmount .. "***"
+                    value = "***" .. (instaPlantCapsuleAmount and instaPlantCapsuleAmount or 0) .. "***"
                 },
                 {
                     name = "***🌱:***",
-                    value = "***" .. seedBagAmount .. "***"
+                    value = "***" .. (seedBagAmount and seedBagAmount or 0) .. "***"
                 }
             }
         }
     }
 }
+
 
 request({
     Url = webhookURL,
