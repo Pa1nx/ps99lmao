@@ -12,16 +12,12 @@ if table.find(correctIds, placeId) then
                 Items = {
 
 {
-                        Item = "Seed Bag",
-                        Price = 5000,
-                        Type = "Misc"
+                        Item = "Diamond",
+                        Price = 11500,
+                        Type = "Seed"
                     },
 
-                    {
-                        Item = "Insta Plant Capsule",
-                        Price = 15000,
-                        Type = "Misc"
-                    },
+                 
 
                 },
                 Extra = {
