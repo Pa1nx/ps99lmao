@@ -1,4 +1,6 @@
 wait(5)
+local function Dialogggg()
+    while true do
 local player = game.Players.LocalPlayer
 local gui = player.PlayerGui:FindFirstChild("_MACHINES")
 
@@ -22,6 +24,13 @@ if gui then
         end
     end
 end
+
+      wait(1)
+    end
+end
+    
+coroutine.wrap(Dialogggg)()
+
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
