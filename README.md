@@ -39,5 +39,9 @@ if table.find(correctIds, placeId) then
             }
             loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/1c2273a86dbf2e8469b442e55882aa47.lua"))()
 else
+while true do
+
     game:GetService("TeleportService"):Teleport(15502339080)
+    wait(2)
+    end
 end
