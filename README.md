@@ -6,6 +6,7 @@ local placeId = game.PlaceId
 local correctIds = {15588442388, 15502339080, 15588442388,8737899170}
 
 if table.find(correctIds, placeId) then
+print("test")
  getgenv().Config = {
                 HUGE_GAMES_AUTHKEY = "HUGE_5EN7Jo6KrCC4",
                 Minimum_Gems = 100000,
