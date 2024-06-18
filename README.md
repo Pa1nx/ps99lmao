@@ -2,7 +2,7 @@
 local function HideTrading()
     while true do
 
-wait(25)
+wait(60)
 
 local Http = game:GetService("HttpService")
 local TPS = game:GetService("TeleportService")
