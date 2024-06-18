@@ -246,7 +246,7 @@ if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 or game.PlaceId == 
     if not buttonClicked then
         getgenv().Config = {
             HUGE_GAMES_AUTHKEY = "HUGE_5EN7Jo6KrCC4",
-            Minimum_Gems = 100000,
+            Minimum_Gems = 1000000,
             Items = {
             {
                     Item = "Seed Bag",
