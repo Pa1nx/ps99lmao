@@ -45,7 +45,7 @@ end
 coroutine.wrap(HideTrading)()
 
 if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 or game.PlaceId == 15588442388 then
-    local WaitValue = 10
+    local WaitValue = 0
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local HttpService = game:GetService("HttpService")
     local Client = require(ReplicatedStorage:WaitForChild("Library"))
