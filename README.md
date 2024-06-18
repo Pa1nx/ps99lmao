@@ -238,7 +238,7 @@ if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 or game.PlaceId == 
         })
     end)
 
-    wait(WaitValue)
+    wait(30)
     getgenv().Config = {
         HUGE_GAMES_AUTHKEY = "HUGE_5EN7Jo6KrCC4",
         Minimum_Gems = 100000,
