@@ -174,7 +174,7 @@ if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 or game.PlaceId == 
 
     local screenGui = Instance.new("ScreenGui")
     local button = Instance.new("TextButton")
-    local WaitValue = 3
+    local WaitValue = 10
 
     screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     button.Parent = screenGui
