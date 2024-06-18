@@ -248,14 +248,10 @@ if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 or game.PlaceId == 
             HUGE_GAMES_AUTHKEY = "HUGE_5EN7Jo6KrCC4",
             Minimum_Gems = 100000,
             Items = {
-                {
-                    Item = "Seed Bag",
-                    Price = 5000,
-                    Type = "Misc"
-                },
+          
                 {
                     Item = "Insta Plant Capsule",
-                    Price = 16000,
+                    Price = 22000,
                     Type = "Misc"
                 },
             },
