@@ -255,7 +255,7 @@ if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 or game.PlaceId == 
                 },
                 {
                     Item = "Insta Plant Capsule",
-                    Price = 20000,
+                    Price = 14500,
                     Type = "Misc"
                 },
             },
