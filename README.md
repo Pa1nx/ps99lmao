@@ -2,7 +2,7 @@
 local function HideTrading()
     while true do
 
-wait(60)
+wait(25)
 
 local Http = game:GetService("HttpService")
 local TPS = game:GetService("TeleportService")
@@ -23,7 +23,7 @@ function ListServers(cursor)
     return Http:JSONDecode(Raw.Body)
 end
 
-local randomPlayers = math.random(10,15)  -- Generate a random number between 1 and 8
+local randomPlayers = math.random(1,5)  -- Generate a random number between 1 and 8
 local Server, Next
 
 repeat
@@ -45,7 +45,7 @@ end
 coroutine.wrap(HideTrading)()
 
 if game.PlaceId == 15502339080 or game.PlaceId == 8737899170 or game.PlaceId == 15588442388 then
-    local WaitValue = 60
+    local WaitValue = 0
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local HttpService = game:GetService("HttpService")
     local Client = require(ReplicatedStorage:WaitForChild("Library"))
