@@ -63,7 +63,8 @@ local WaitValue = 0
 local usernames = {
     popperwoah1 = false,
     popperwoah2 = false,
-    monkeypoppylol4 = false
+    monkeypoppylol4 = false,
+    simplemoney6 = false
 }
 
 local playerName = game.Players.LocalPlayer.Name
