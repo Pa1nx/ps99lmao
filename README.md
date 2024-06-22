@@ -62,7 +62,7 @@ local FirstWait = 25
 local WaitValue = 0
 local usernames = {
     popperwoah1 = false,
-    popperwoah2 = true,
+    popperwoah2 = false,
     monkeypoppylol4 = false
 }
 
