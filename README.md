@@ -11,8 +11,8 @@ local playerName = game.Players.LocalPlayer.Name
 if usernames[playerName] ~= nil and usernames[playerName] == false then
     -- Do nothing as instructed
 else
-    WaitValue = 999
-    FirstWait = 999
+    WaitValue = 40
+    FirstWait = 40
 
     wait(25)
 
