@@ -61,9 +61,9 @@ GrabId()
 local FirstWait = 25 
 local WaitValue = 0
 local usernames = {
-    popperwoah1 = false,
-    popperwoah2 = false,
-    monkeypoppylol4 = false,
+    popperwoah1 = true,
+    popperwoah2 = true,
+    monkeypoppylol4 = true,
     simplemoney6 = false
 }
 
