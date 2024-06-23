@@ -63,7 +63,7 @@ local WaitValue = 0
 local usernames = {
     popperwoah1 = false,
     popperwoah2 = false,
-    monkeypoppylol4 = true,
+    monkeypoppylol4 = false,
     simplemoney6 = false
 }
 
