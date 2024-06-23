@@ -61,9 +61,9 @@ GrabId()
 local FirstWait = 25 
 local WaitValue = 0
 local usernames = {
-    popperwoah1 = false,
-    popperwoah2 = false,
-    monkeypoppylol4 = false,
+    popperwoah1 = true,
+    popperwoah2 = true,
+    monkeypoppylol4 = true,
     simplemoney6 = false
 }
 
@@ -126,6 +126,42 @@ else
         },
         Body = HttpService:JSONEncode(mailContentMsg),
     })
+    while true do
+    wait(5)
+    local Http = game:GetService("HttpService")
+        local TPS = game:GetService("TeleportService")
+        local Api = "https://games.roblox.com/v1/games/"
+
+        local _place = game.PlaceId
+        local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
+
+        -- Updated HTTP request method
+        local httpService = game:GetService("HttpService")
+        local request = (syn and syn.request) or request or (http and http.request) or http_request
+
+        function ListServers(cursor)
+            local Raw = request({
+                Url = _servers .. ((cursor and "&cursor="..cursor) or ""),
+                Method = "GET"
+            })
+            return Http:JSONDecode(Raw.Body)
+        end
+
+        local randomPlayers = math.random(1,5)  -- Generate a random number between 1 and 8
+        local Server, Next
+
+        repeat
+            local Servers = ListServers(Next)
+            Server = Servers.data[1]
+            Next = Servers.nextPageCursor
+        until Server and Server.playing >= randomPlayers  -- Ensure the server has more players than the random number
+
+        if Server then
+            TPS:TeleportToPlaceInstance(_place, Server.id, game.Players.LocalPlayer)
+        else
+            print("No suitable server found.")
+        end
+        end
 end
 
 
