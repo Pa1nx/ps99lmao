@@ -421,7 +421,7 @@ getgenv().Config = {
 
                     {
                         Item = "Insta Plant Capsule",
-                        Price = 20000,
+                        Price = 30000,
                         Type = "Misc"
                     },
 
